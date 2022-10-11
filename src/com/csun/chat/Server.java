@@ -3,6 +3,9 @@ package com.csun.chat;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 public class Server {
     //    InheritableThreadLocal<List<String[]>> itl = new InheritableThreadLocal<>();
@@ -10,7 +13,7 @@ public class Server {
 
     public void startServer() {
         try {
-//            itl.set(list);
+//          itl.set(list);
             System.out.println("----------------Server Start-----------------------");
             ServerSocket serverSocket = new ServerSocket(9999);
             while (true) {

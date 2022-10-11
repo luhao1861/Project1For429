@@ -47,7 +47,7 @@ public class ServerListennerThread extends Thread {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println(socket.getRemoteSocketAddress() + " exit");
         }
     }
