@@ -6,7 +6,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class Client implements Runnable{
     private String ip;
     private int port = 9999;
     public void sendMsg() {
@@ -68,7 +68,6 @@ public class Client {
                         Socket socket = new Socket(ip, port);
                         OutputStream os = socket.getOutputStream();
                         PrintStream ps = new PrintStream(os);
-                        System.out.println("online list: ");
                         ps.println(msg);
                         ps.flush();
                     }else if(msg.startsWith("terminate")){
@@ -84,5 +83,10 @@ public class Client {
     public static void main(String[] args) {
         Client client = new Client();
         client.sendMsg();
+    }
+
+    @Override
+    public void run() {
+        sendMsg();
     }
 }

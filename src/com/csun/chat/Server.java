@@ -1,5 +1,8 @@
 package com.csun.chat;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -7,10 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-public class Server {
+public class Server implements Runnable{
     //    InheritableThreadLocal<List<String[]>> itl = new InheritableThreadLocal<>();
     ArrayList<String[]> list = new ArrayList<>();
-
+    private String ip;
+    private int port = 9999;
     public void startServer() {
         try {
 //          itl.set(list);
@@ -29,5 +33,10 @@ public class Server {
     public static void main(String[] args) {
         Server server = new Server();
         server.startServer();
+    }
+
+    @Override
+    public void run() {
+        startServer();
     }
 }
