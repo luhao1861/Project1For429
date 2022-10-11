@@ -1,5 +1,7 @@
 package com.csun.chat;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.InetAddress;
@@ -8,11 +10,12 @@ import java.util.Scanner;
 
 public class Client implements Runnable{
     private String ip;
-    private int port = 9999;
+    private int port;
     public void sendMsg() {
         System.out.println("---------------Client Start---------------------");
         try {
             Scanner scanner = new Scanner(System.in);
+
             while (true) {
                 String msg = scanner.nextLine();
                 if (!msg.isEmpty()) {
@@ -39,13 +42,13 @@ public class Client implements Runnable{
                         Socket socket = new Socket(ip, port);
                         OutputStream os = socket.getOutputStream();
                         PrintStream ps = new PrintStream(os);
-                        System.out.println("say: " + msg.replaceFirst("send",""));
+                        System.out.println("you say: " + msg.replaceFirst("send",""));
                         ps.println(msg);
                         ps.flush();
                     }else if(msg.startsWith("myip")){
                         System.out.println("My ip is: " + InetAddress.getLocalHost().getHostAddress());
-                    }else if(msg.startsWith("myport ")){
-                        System.out.println("My server listening  port  is: 9999");
+                    }else if(msg.startsWith("myport")){
+                        System.out.println("My server listening port is: 9999");
                     }else if(msg.startsWith("connect")){
                         String[] strs = msg.split(" ");
                         this.ip = strs[1];
@@ -70,6 +73,9 @@ public class Client implements Runnable{
                         PrintStream ps = new PrintStream(os);
                         ps.println(msg);
                         ps.flush();
+                        BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        String str = br.readLine();
+                        System.out.println(str);
                     }else if(msg.startsWith("terminate")){
 
                     }
@@ -78,11 +84,6 @@ public class Client implements Runnable{
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        Client client = new Client();
-        client.sendMsg();
     }
 
     @Override

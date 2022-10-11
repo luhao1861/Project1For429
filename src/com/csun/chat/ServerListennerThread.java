@@ -1,14 +1,12 @@
 package com.csun.chat;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.util.List;
 
 public class ServerListennerThread extends Thread {
     private Socket socket;
-
+    private PrintWriter out;
     private List<String[]> list;
 
     public ServerListennerThread(Socket socket, List list) {
@@ -21,6 +19,7 @@ public class ServerListennerThread extends Thread {
         try {
             InputStream is = socket.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             String msg;
             while ((msg = br.readLine()) != null) {
                 if (msg.startsWith("send")) {
@@ -36,18 +35,22 @@ public class ServerListennerThread extends Thread {
                     list.add(strs);
                 } else if (msg.startsWith("exit")) {
                     socket.close();
-                    System.out.println(socket.getRemoteSocketAddress() + " exit");
+//                  System.out.println(socket.getRemoteSocketAddress() + " exit");
                     break;
                 } else if (msg.startsWith("list")) {
                     msg.replaceFirst("list","online list: \n");
                     for (String[] s : list) {
                         msg += " id: " + s[0] + " ip: " + s[1] + " is online \n";
-                        System.out.println(msg);
                     }
+                    out = new PrintWriter(socket.getOutputStream());
+                    out.println(msg);
+                    out.flush();
+                }else if(msg.startsWith("myport")){
+                    System.out.println("My server listening  port  is: "+socket.getPort());
                 }
             }
         } catch (Exception e) {
-//            e.printStackTrace();
+//          e.printStackTrace();
             System.out.println(socket.getRemoteSocketAddress() + " exit");
         }
     }
